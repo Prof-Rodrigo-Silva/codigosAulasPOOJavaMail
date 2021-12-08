@@ -25,7 +25,10 @@ public class TesteJavaMail {
 							"Prof Rodrigo",
 							"Teste e-mail",
 							stringBuilderTextoEmail.toString());
-			enviaEmail.enviarEmail(true);
+			//enviaEmail.enviarEmail(true);
+			
+			
+			enviaEmail.enviarEmailAnexo(true);
 		
 		//Caso o email não esteja sendo enviado colocar um tempo de espera
 		//Thread.sleep(5000);

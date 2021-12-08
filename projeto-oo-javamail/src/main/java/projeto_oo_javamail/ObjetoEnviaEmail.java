@@ -3,6 +3,8 @@ package projeto_oo_javamail;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -24,8 +26,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class ObjetoEnviaEmail {
-	
-	
 	
 	private String userName = "";//Incluir o e-mail
 	private String password = "";//Incluir a senha
@@ -134,20 +134,34 @@ public void enviarEmailAnexo(boolean envioHtml) {
 				corpoEmail.setText(textoEmail);
 			}
 			
-			MimeBodyPart anexoEmail = new MimeBodyPart();
-			anexoEmail.setDataHandler(new DataHandler(new ByteArrayDataSource(simuladorDePDF(), "aplication/pdf")));
-			anexoEmail.setFileName("anexo.pdf");
+			List<FileInputStream> arquivos = new ArrayList<FileInputStream>();
+			arquivos.add(simuladorDePDF());
+			arquivos.add(simuladorDePDF());
+			arquivos.add(simuladorDePDF());
+			arquivos.add(simuladorDePDF());
 			
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(corpoEmail);
-			multipart.addBodyPart(anexoEmail);
+			
+			int index = 0;
+			for(FileInputStream fileInputStream : arquivos) {
+				
+				MimeBodyPart anexoEmail = new MimeBodyPart();
+				anexoEmail.setDataHandler(new DataHandler(new ByteArrayDataSource(fileInputStream, "aplication/pdf")));
+				anexoEmail.setFileName("anexo"+index+".pdf");
+				
+				
+				multipart.addBodyPart(anexoEmail);
+				index ++;
+			
+			}
 			
 			message.setContent(multipart);
 			
 			Transport.send(message);
 			
 			//Caso o email não esteja sendo enviado colocar um tempo de espera
-			//Thread.sleep(5000);
+			Thread.sleep(5000);
 			
 			
 			}catch (Exception e) {
